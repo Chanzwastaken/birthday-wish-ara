@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for Ara!</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------------------------------
+        --- 2. GLOBAL & THEME STYLING ---
+        ---------------------------------
+        */
+        :root {
+            --font-heading: 'Playfair Display', 'Cormorant Garamond', serif;
+            --font-body: 'Poppins', 'Inter', sans-serif;
+            --color-glow: rgba(255, 255, 255, 0.8);
+            --color-text: rgba(255, 255, 255, 0.9);
+            --color-dark: #0a0514; /* Deep purple/blue dark */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: var(--font-body);
+            background-color: var(--color-dark);
+            color: var(--color-text);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        body {
+            /* --- 🌌 ANIMATED AURORA BACKGROUND ---
+            This pseudo-element creates the shifting gradient effect.
+            */
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(320deg, 
+                #6d327c, /* Purple */
+                #4823a0, /* Blue */
+                #7c2c5f, /* Pink/Magenta */
+                #2c5b7c  /* Dark Blue */
+            );
+            background-size: 400% 400%;
+            animation: aurora-shift 20s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0.6; /* Subtle, as requested */
+        }
+
+        @keyframes aurora-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ---------------------------------
+        --- 3. LANDING PAGE (SCENE 1) ---
+        ---------------------------------
+        */
+        #landing-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            background-color: var(--color-dark);
+            transition: opacity 1.5s cubic-bezier(0.7, 0, 0.3, 1), visibility 1.5s;
+        }
+
+        #surprise-btn {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--color-glow);
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 20px 40px;
+            cursor: pointer;
+            animation: text-glow 2.5s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        #surprise-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            animation-play-state: paused;
+            text-shadow: 
+                0 0 10px #fff,
+                0 0 20px #fff,
+                0 0 30px #e60073;
+        }
+
+        @keyframes text-glow {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+            50% { text-shadow: 0 0 15px #fff, 0 0 25px #c37dff, 0 0 30px #c37dff; }
+            100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+        }
+
+        /* ----------------------------------
+        --- 4. SURPRISE PAGE (SCENE 2) ---
+        ----------------------------------
+        */
+        #surprise-page {
+            position: relative;
+            z-index: 10;
+            opacity: 0; /* Initially hidden */
+            visibility: hidden;
+            display: none; /* JS will change this */
+            transition: opacity 1.5s ease-in 0.5s;
+            padding: 40px 20px;
+        }
+
+        /* This class is added by JS to trigger the cinematic fade-in */
+        #surprise-page.visible {
+            display: block;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- 🎂 MAIN GREETING & ILLUSTRATION --- 
+        */
+        .greeting-section {
+            text-align: center;
+            margin-top: 2vh;
+            animation: slide-up-fade-in 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s backwards;
+        }
+
+        .greeting-section img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+            /* Fun, subtle float animation */
+            animation: gentle-float 6s ease-in-out infinite;
+        }
+
+        .greeting-section h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3.5rem, 10vw, 6rem); /* Responsive text */
+            margin: 0;
+            /* Sparkle/Glow Animation */
+            animation: text-glow 2.5s ease-in-out infinite 1s;
+        }
+
+        @keyframes gentle-float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes slide-up-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- ✨ PHOTO CAROUSEL SECTION --- 
+        */
+        .carousel-container {
+            position: relative; /* For positioning the emojis */
+            margin: 80px auto;
+            width: 90%;
+            max-width: 1000px;
+            animation: slide-up-fade-in 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1s backwards;
+            
+            /* Glassmorphism Panel Style */
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(18, 0, 31, 0.37);
+            padding: 20px;
+            overflow: hidden; /* This is key for the carousel */
+        }
+
+        /* Infinite horizontal scroll */
+        .photo-carousel {
+            display: flex;
+            width: fit-content;
+            animation: infinite-scroll 40s linear infinite;
+        }
+
+        .carousel-item {
+            flex-shrink: 0;
+            width: 300px;
+            height: 300px;
+            margin: 0 10px;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 220, 255, 0.5);
+        }
+        .carousel-item:hover img {
+            transform: scale(1.1);
+        }
+
+        @keyframes infinite-scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); } /* Assumes loop of images */
+        }
+
+        /* 💖 Animated Emojis around carousel */
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: gentle-float 8s ease-in-out infinite;
+            opacity: 0.8;
+        }
+        .emoji-1 { top: -20px; left: 10%; animation-delay: 0s; }
+        .emoji-2 { top: 40%; left: -30px; animation-delay: -2s; }
+        .emoji-3 { bottom: -10px; right: 15%; animation-delay: -4s; }
+        .emoji-4 { top: 10%; right: -20px; animation-delay: -6s; }
+        
+
+        /* --- 💌 LETTER SECTION --- 
+        */
+        .letter-section {
+            text-align: center;
+            margin: 50px 0 100px 0;
+            animation: slide-up-fade-in 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s backwards;
+        }
+
+        #open-letter-btn {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #fff;
+            background: linear-gradient(145deg, #ad5389, #3c1053);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(60, 16, 83, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        #open-letter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(173, 83, 137, 0.6);
+            animation-play-state: paused;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 5px 20px rgba(60, 16, 83, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(173, 83, 137, 0.8); }
+            100% { box-shadow: 0 5px 20px rgba(60, 16, 83, 0.5); }
+        }
+
+        /* ---------------------------------
+        --- 5. LETTER MODAL POPUP ---
+        ---------------------------------
+        */
+        #letter-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 600px;
+            z-index: 200;
+            
+            /* Glassmorphism Style */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(18, 0, 31, 0.5);
+            
+            padding: 30px;
+            
+            /* Hide/Show Animation */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.3, 1.5, 0.6, 1), visibility 0.4s;
+        }
+
+        /* This class is added by JS */
+        #letter-modal.show-modal {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #letter-modal h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        #letter-modal p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        #close-letter-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2rem;
+            font-weight: 300;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+        #close-letter-btn:hover {
+            transform: scale(1.2) rotate(90deg);
+            color: #ffc4c4;
+        }
+
+        /* Modal Overlay (for the background blur effect) */
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 199;
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        #modal-overlay.show-modal {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* ---------------------------------
+        --- 6. DECORATIVE ELEMENTS ---
+        ---------------------------------
+        */
+        
+        /* 🎈 Floating Balloons */
+        .balloon {
+            position: fixed;
+            bottom: -150px; /* Start off-screen */
+            width: 60px;
+            height: auto;
+            opacity: 0.7;
+            z-index: 5;
+            animation: float-up 15s linear infinite;
+        }
+        
+        .balloon.b1 { left: 10%; animation-duration: 20s; animation-delay: 1s; }
+        .balloon.b2 { left: 30%; animation-duration: 15s; animation-delay: 3s; }
+        .balloon.b3 { left: 70%; animation-duration: 18s; animation-delay: 0s; }
+        .balloon.b4 { left: 90%; animation-duration: 14s; animation-delay: 5s; }
+        
+        @keyframes float-up {
+            from {
+                bottom: -150px;
+                transform: translateX(0);
+            }
+            to {
+                bottom: 110vh; /* Go all the way to the top */
+                transform: translateX(40px) rotate(15deg); /* Gentle side drift */
+            }
+        }
+
+        /* 🎂 3D Cake with flickering candle */
+        .cake {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 120px;
+            height: auto;
+            z-index: 15;
+            animation: slide-up-fade-in 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 2s backwards;
+        }
+        
+        .cake::after {
+            /* This is the candle flame */
+            content: '';
+            position: absolute;
+            top: 12px; /* Adjust based on your cake image */
+            left: 56px; /* Adjust based on your cake image */
+            width: 8px;
+            height: 12px;
+            background: #ffc107;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 10px #ffc107, 0 0 20px #ffc107, 0 0 5px #ffeb3b;
+            animation: flicker 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 1; transform: scaleY(1); }
+            25% { opacity: 0.8; transform: scaleY(0.95); }
+            50% { opacity: 1; transform: scaleY(1.05); }
+            75% { opacity: 0.7; transform: scaleY(0.9); }
+            100% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* ---------------------------------
+        --- 7. RESPONSIVENESS ---
+        ---------------------------------
+        */
+        @media (max-width: 768px) {
+            #surprise-btn {
+                font-size: 1.8rem;
+                padding: 15px 30px;
+            }
+            .greeting-section img {
+                max-width: 250px;
+            }
+            .carousel-item {
+                width: 250px;
+                height: 250px;
+            }
+            .floating-emoji { font-size: 1.5rem; }
+            .cake { width: 90px; }
+            .cake::after { top: 9px; left: 42px; width: 6px; height: 9px; }
+            .balloon { width: 40px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="birthday-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <img src="balloon.png" alt="" class="balloon b1">
+    <img src="balloon.png" alt="" class="balloon b2">
+    <img src="balloon.png" alt="" class="balloon b3">
+    <img src="balloon.png" alt="" class="balloon b4">
+    
+    <img src="cake.png" alt="Birthday Cake" class="cake">
+    
+
+    <main id="landing-page">
+        <button id="surprise-btn">Click here for a surprise 🎉</button>
+    </main>
+
+    <section id="surprise-page">
+        
+        <div class="greeting-section">
+            <img src="Ara-cartoon.png" alt="Happy Birthday Ara!">
+            <h1>Happy Birthday, Ara! 🎂</h1>
+        </div>
+
+        <div class="carousel-container">
+            <div class="photo-carousel">
+                <div class="carousel-item"><img src="photo1.jpg" alt="Memory 1"></div>
+                <div class="carousel-item"><img src="photo2.jpg" alt="Memory 2"></div>
+                <div class="carousel-item"><img src="photo3.jpg" alt="Memory 3"></div>
+                <div class="carousel-item"><img src="photo4.jpg" alt="Memory 4"></div>
+                <div class="carousel-item"><img src="photo5.jpg" alt="Memory 5"></div>
+                
+                <div class="carousel-item"><img src="photo1.jpg" alt="Memory 1"></div>
+                <div class="carousel-item"><img src="photo2.jpg" alt="Memory 2"></div>
+                <div class="carousel-item"><img src="photo3.jpg" alt="Memory 3"></div>
+                <div class="carousel-item"><img src="photo4.jpg" alt="Memory 4"></div>
+                <div class="carousel-item"><img src="photo5.jpg" alt="Memory 5"></div>
+            </div>
+            
+            <span class="floating-emoji emoji-1">✨</span>
+            <span class="floating-emoji emoji-2">💖</span>
+            <span class="floating-emoji emoji-3">🌸</span>
+            <span class="floating-emoji emoji-4">🎂</span>
+        </div>
+
+        <div class="letter-section">
+            <button id="open-letter-btn">Open Letter 💌</button>
+        </div>
+
+    </section>
+
+    <div id="modal-overlay"></div>
+    <div id="letter-modal" class="glass-panel">
+        <button id="close-letter-btn">&times;</button>
+        <h2>To my dear friend, Ara...</h2>
+        <p>
+            Happy, happy birthday! 🎉
+        </p>
+        <p>
+            I wanted to make something a little special for you to celebrate your day. I hope this makes you smile! It's been so amazing having you as a friend...
+        </p>
+        <p>
+            </p>
+        <p>
+            Wishing you the most incredible year ahead, filled with joy, success, and all the good things you deserve.
+        </p>
+        <p style="text-align: right; margin-top: 20px; font-weight: bold;">
+            With lots of love, <br>
+            [Your Name]
+        </p>
+    </div>
+
+
+    <script>
+        // --- 1. Get all the elements we need ---
+        const landingPage = document.getElementById('landing-page');
+        const surpriseBtn = document.getElementById('surprise-btn');
+        const surprisePage = document.getElementById('surprise-page');
+        const bgMusic = document.getElementById('bg-music');
+        
+        const openLetterBtn = document.getElementById('open-letter-btn');
+        const closeLetterBtn = document.getElementById('close-letter-btn');
+        const letterModal = document.getElementById('letter-modal');
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        // --- 2. Cinematic Transition on First Click ---
+        surpriseBtn.addEventListener('click', () => {
+            // 1. Start playing music (browsers may require interaction first, which this click provides)
+            bgMusic.play();
+
+            // 2. Fade out the landing page
+            landingPage.style.opacity = '0';
+            landingPage.style.visibility = 'hidden';
+            
+            // 3. After the fade-out is done, remove it and show the surprise
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+                
+                // 4. Show and fade in the surprise page (using the .visible class)
+                surprisePage.classList.add('visible');
+
+            }, 1500); // This matches the 1.5s CSS transition
+        });
+
+        // --- 3. Letter Modal Functionality ---
+        function showLetter() {
+            modalOverlay.classList.add('show-modal');
+            letterModal.classList.add('show-modal');
+        }
+
+        function hideLetter() {
+            modalOverlay.classList.remove('show-modal');
+            letterModal.classList.remove('show-modal');
+        }
+
+        openLetterBtn.addEventListener('click', showLetter);
+        closeLetterBtn.addEventListener('click', hideLetter);
+        modalOverlay.addEventListener('click', hideLetter); // Close by clicking outside
+
+    </script>
+
+</body>
+</html>
